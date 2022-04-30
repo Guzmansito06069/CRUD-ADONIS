@@ -1,0 +1,36 @@
+@layout('master')
+
+@section('view')
+
+  <div class="box">
+    <h2 class="title">Actualizar Categoria</h2>
+     <form action="{{ 'instrumentose/' + task.id + '?_method=PATCH' }}" method="POST">
+      {{ csrfField() }}
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="nombre" value="{{ old('nombre', '') }}" placeholder="Nombre">
+        </div>
+        <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="descripcion" value="{{ old('descripcion', '') }}" placeholder="Descripcion">
+        </div>
+        
+        <div class="control">
+          <button type="submit" class="button is-info">
+            <span class="icon is-small">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Modificar</span>            
+          </button>
+        </div>
+      </div>
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('nombre'), hasErrorFor('nombre')) }}
+    {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('descripcion'), hasErrorFor('descripcion')) }}
+    </form>
+  </div>
+
+  @if(old('notification'))
+    <div class="notification is-success">
+        {{ old('notification') }}
+    </div>
+  @endif

@@ -1,0 +1,97 @@
+@layout('master')
+
+@section('view')
+
+  <div class="box">
+    <h2 class="title">Nuevo Estado</h2>
+    <form action="/Estado" method="POST">
+      {{ csrfField() }}
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="nombre" value="{{ old('nombre', '') }}" placeholder="Nombre">
+        </div>
+        <div class="control is-expanded">
+          <input class="input" type="text" name="gobernador" value="{{ old('gobernador', '') }}" placeholder="Gobernador">
+        </div>
+        <div class="control is-expanded">
+          <input class="input" type="text" name="entidad" value="{{ old('entidad', '') }}" placeholder="Entidad">
+        </div>
+        <div class="control is-expanded">
+          <input class="input" type="text" name="descripcion" value="{{ old('descripcion', '') }}" placeholder="Descripcion">
+        </div>
+        <div class="control">
+          <button type="submit" class="button is-info">
+            <span class="icon is-small">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Agregar</span>            
+          </button>
+        </div>
+      </div>
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('nombre'), hasErrorFor('nombre')) }}
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('gobernador'), hasErrorFor('gobernador')) }}
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('entidad'), hasErrorFor('entidad')) }}
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('descripcion'), hasErrorFor('descripcion')) }}
+      
+      
+      </form>
+  </div>
+
+  @if(old('notification'))
+    <div class="notification is-success">
+        {{ old('notification') }}
+    </div>
+  @endif
+
+  <div class="box">
+    <h1 class="title">Lista de Estados</h1>
+    <table class="table is-bordered is-striped is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th style="width: 80px;">#</th>
+          <th>Nombre</th>
+          <th>Gobernador</th>
+          <th>Entidad</th>
+          <th>Descripcion</th>
+          <th style="width: 120px;">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(task in Estado)
+          <tr>
+            <td>
+              {{ ($loop.index + 1) }}
+            </td>
+            <td>
+              {{ task.nombre }}
+            </td>
+            <td>
+              {{ task.gobernador }}
+            </td>
+            <td>
+              {{ task.entidad }}
+            </td>
+            <td>
+              {{ task.descripcion }}
+            </td>
+            <td>
+              <form action="{{ 'Estado/' + task.id + '?_method=DELETE' }}" method="POST">
+                {{ csrfField() }}
+                <button type="submit" class="button is-danger is-outlined">                  
+                  <span class="icon is-small">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <span>Eliminar</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+        @else
+          <tr>
+            <td colspan="5" class="has-text-centered">¡Ningun Estado creado todavía!</td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+@endsection

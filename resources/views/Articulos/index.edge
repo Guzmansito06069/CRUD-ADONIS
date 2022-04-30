@@ -1,0 +1,139 @@
+@layout('master')
+
+@section('view')
+
+  <div class="box">
+    <h2 class="title">Nuevo Articulo</h2>
+    <form action="/instrumentos" method="POST">
+      {{ csrfField() }}
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="nombre" value="{{ old('nombre', '') }}" placeholder="Nombre">
+        </div>
+        <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="descripcion" value="{{ old('descripcion', '') }}" placeholder="Descripcion">
+        </div>
+        
+        <div class="control is-expanded">
+          <input class="input" type="text" name="precio" value="{{ old('precio', '') }}" placeholder="Precio">
+        </div>
+        
+        <div class="control is-expanded">
+          <input class="input" type="text" name="color" value="{{ old('color', '') }}" placeholder="Color">
+        </div>
+       
+        <div class="control is-expanded">
+          <input class="input" type="text" name="idc" value="{{ old('idc', '') }}" placeholder="Categoria">
+        </div>
+        
+        <div class="control is-expanded">
+          <input class="input" type="text" name="idm" value="{{ old('idm', '') }}" placeholder="Marca">
+        </div>
+        <div class="control">
+          <button type="submit" class="button is-info">
+            <span class="icon is-small">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Agregar</span>            
+          </button>
+        </div>
+      </div>
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('nombre'), hasErrorFor('nombre')) }}
+    {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('precio'), hasErrorFor('precio')) }}
+    </form>
+  </div>
+
+  @if(old('notification'))
+    <div class="notification is-success">
+        {{ old('notification') }}
+    </div>
+  @endif
+
+  <div class="box">
+    <h1 class="title">Lista de Articulos</h1>
+    <table class="table is-bordered is-striped is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th style="width: 80px;">#</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Precio</th>
+          <th>Color</th>
+          <th>Categoria</th>
+          <th>Marca</th>
+          <th style="width: 120px;">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(task in Articulos)
+          <tr>
+            <td>
+              {{ ($loop.index + 1) }}
+            </td>
+            <td>
+              {{ task.nombre }}
+            </td>
+            <td>
+              {{ task.descripcion }}
+            </td>
+            <td>
+              {{ task.precio }}
+            </td>
+            <td>
+              {{ task.color }}
+            </td>
+            <td>
+              {{ task.idc }}
+            </td>
+            <td>
+              {{ task.idm }}
+            </td>
+        
+            <td>
+              <form action="{{ 'instrumentos/' + task.id + '?_method=DELETE' }}" method="POST">
+                {{ csrfField() }}
+                <button type="submit" class="button is-danger is-outlined">                  
+                  <span class="icon is-small">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <span>Eliminar</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+        @else
+          <tr>
+            <td colspan="7" class="has-text-centered">¡Ningun articulo creado todavía!</td>
+          </tr>
+        @endeach
+         <div class="box">
+    <h2 class="title">Actualizar Categoria</h2>
+     <form action="{{ 'instrumentose/' + task.id + '?_method=PATCH' }}" method="POST">
+      {{ csrfField() }}
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="nombre" value="{{ old('nombre', '') }}" placeholder="Nombre">
+        </div>
+        <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="descripcion" value="{{ old('descripcion', '') }}" placeholder="Descripcion">
+        </div>
+        
+        <div class="control">
+          <button type="submit" class="button is-info">
+            <span class="icon is-small">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Modificar</span>            
+          </button>
+        </div>
+      </div>
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('nombre'), hasErrorFor('nombre')) }}
+    {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('descripcion'), hasErrorFor('descripcion')) }}
+    </form>
+  </div>
+      </tbody>
+    </table>
+  </div>
+@endsection

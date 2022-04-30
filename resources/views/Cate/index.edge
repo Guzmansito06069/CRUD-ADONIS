@@ -1,0 +1,92 @@
+@layout('master')
+
+@section('view')
+
+  <div class="box">
+    <h2 class="title">Nueva Categoria</h2>
+    <form action="/Cate" method="POST">
+      {{ csrfField() }}
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="nombre" value="{{ old('nombre', '') }}" placeholder="Nombre">
+        </div>
+        <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" name="descripcion" value="{{ old('descripcion', '') }}" placeholder="Descripcion">
+        </div>
+        <div class="control">
+          <button type="submit" class="button is-warning">
+            <span class="icon is-small">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+            </span>
+            <span>Agregar</span>            
+          </button>
+        </div>
+      </div>
+      {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('nombre'), hasErrorFor('nombre')) }}
+    {{ elIf('<p class="help is-danger">$self</p>', getErrorFor('descripcion'), hasErrorFor('descripcion')) }}
+    </form>
+  </div>
+
+  @if(old('notification'))
+    <div class="notification is-success">
+        {{ old('notification') }}
+    </div>
+  @endif
+
+  <div class="box">
+    <h1 class="title">Lista de Categorias</h1>
+    <table class="table is-bordered is-striped is-narrow is-fullwidth">
+      <thead>
+        <tr>
+          <th style="width: 80px;">#</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th style="width: 120px;">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(task in Cate)
+          <tr>
+            <td>
+              {{ ($loop.index + 1) }}
+            </td>
+            <td>
+              {{ task.nombre }}
+            </td>
+            <td>
+              {{ task.descripcion }}
+            </td>
+            <td>
+              <form action="{{ 'Cate/' + task.id + '?_method=DELETE' }}" method="POST">
+                {{ csrfField() }}
+                <button type="submit" class="button is-danger is-outlined">                  
+                  <span class="icon is-small">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <span>Eliminar </span>
+                </button>
+              </form>
+              <form action="{{ 'Cate/' + task.id + '?_method=UPDATE' }}" method="POST">
+                {{ csrfField() }}
+                <button type="submit" class="button is-info is-outlined">                  
+                  <span class="icon is-small">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                  </span>
+                  <span>Modificar</span>
+                </button>
+              </form>
+            </td>
+          </tr>
+            </td>
+          </tr>
+          
+        @else
+          <tr>
+            <td colspan="3" class="has-text-centered">¡Ninguna Categoria creada todavía!</td>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+@endsection
